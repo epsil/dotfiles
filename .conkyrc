@@ -1,0 +1,81 @@
+# UBUNTU-CONKY
+#
+# A comprehensive conky script, configured for use on
+# Ubuntu / Debian Gnome, without the need for any external scripts.
+#
+# Based on conky-jc and the default .conkyrc.
+#
+# INCLUDES:
+#
+# - tail of /var/log/messages
+# - netstat shows number of connections from your computer and
+#   application/PID making it. Kill spyware!
+#
+# -- Pengo
+#
+# http://ubuntuforums.org/showthread.php?t=205865
+
+own_window yes
+own_window_transparent yes
+own_window_argb_visual yes
+own_window_type normal
+own_window_class conky-semi
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+
+# Use Xft?
+use_xft yes
+xftfont DejaVu Sans:size=8
+xftalpha 0.8
+draw_shades no
+
+# Update interval in seconds
+update_interval 3.0
+
+# Text alignment
+alignment bottom_right
+gap_x 40
+gap_y 40
+minimum_size 300 600
+# maximum_width 300
+# text_buffer_size 1024
+
+# Stuff after "TEXT" is formatted on screen
+
+TEXT
+
+$nodename $alignr $sysname $kernel ($machine) @ MBA
+$stippled_hr
+Uptime: $uptime $alignr Load: $cpu% ($loadavg)
+${cpugraph cpu0 15}${voffset -7}
+$stippled_hr
+CPU 1: ${freq 1} MHz $alignr(${cpu cpu1}%)               ${cpubar cpu1 5,120}
+CPU 2: ${freq 2} MHz $alignr(${cpu cpu2}%)               ${cpubar cpu2 5,120}
+$stippled_hr
+RAM:${tab 20}$memfree/$memmax $alignr($memperc%)    ${membar 5,120}
+Swap:${tab 20}$swapfree/$swapmax $alignr($swapperc%)    ${swapbar 5,120}
+$stippled_hr
+${font DejaVu Sans Mono:size=8}/$font${tab 20}${fs_free /}/${fs_size /} $alignr(${fs_free_perc /}%)     ${fs_bar 5,120 /}
+${font DejaVu Sans Mono:size=8}/home$font${tab 20}${fs_free /home}/${fs_size /home} $alignr(${fs_free_perc /home}%)     ${fs_bar 5,120 /home}
+$stippled_hr
+Down: ${downspeed eth0}/s $alignr Up: ${upspeed eth0}/s
+${downspeedgraph eth0 15,135 -l}$alignr${upspeedgraph eth0 15,135 -l}
+${voffset -7}$stippled_hr${font DejaVu Sans Mono:size=8}
+${top name 1} $alignr${top pid 1}   ${top cpu 1}   ${top mem 1}
+${top name 2} $alignr${top pid 2}   ${top cpu 2}   ${top mem 2}
+${top name 3} $alignr${top pid 3}   ${top cpu 3}   ${top mem 3}
+${top name 4} $alignr${top pid 4}   ${top cpu 4}   ${top mem 4}
+${top name 5} $alignr${top pid 5}   ${top cpu 5}   ${top mem 5}
+$stippled_hr
+${tcp_portmon 1 65535 rhost 0} ${alignr} ${tcp_portmon 1 65535 rservice 0}
+${tcp_portmon 1 65535 rhost 1} ${alignr} ${tcp_portmon 1 65535 rservice 1}
+${tcp_portmon 1 65535 rhost 2} ${alignr} ${tcp_portmon 1 65535 rservice 2}
+${tcp_portmon 1 65535 rhost 3} ${alignr} ${tcp_portmon 1 65535 rservice 3}
+${tcp_portmon 1 65535 rhost 4} ${alignr} ${tcp_portmon 1 65535 rservice 4}
+$stippled_hr
+${execi 30 dmesg | uniq | tail -n5 | awk '{print "",$3,$4,$5,$6,$7,$8,$9,$10}' | fold -w50}
+$stippled_hr
+                          |\      _,,,---,,_
+                          /,`.-'`'    -.  ;-;;,_
+                         |,4-  ) )-,_..;\ (  `'-'
+                        '---''(_/--'  `-'\_)
