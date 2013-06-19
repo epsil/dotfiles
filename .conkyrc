@@ -36,15 +36,15 @@ update_interval 3.0
 alignment bottom_right
 gap_x 40
 gap_y 40
-minimum_size 300 600
-# maximum_width 300
-# text_buffer_size 1024
+#minimum_size 300 600
+#maximum_width 300
+text_buffer_size 9999
 
 # Stuff after "TEXT" is formatted on screen
 
 TEXT
 
-$nodename $alignr $sysname $kernel ($machine) @ MBA
+$nodename $alignr $sysname $kernel ($machine) @ W530
 $stippled_hr
 Uptime: $uptime $alignr Load: $cpu% ($loadavg)
 ${cpugraph cpu0 15}${voffset -7}
@@ -75,7 +75,9 @@ ${tcp_portmon 1 65535 rhost 4} ${alignr} ${tcp_portmon 1 65535 rservice 4}
 $stippled_hr
 ${execi 30 dmesg | uniq | tail -n5 | awk '{print "",$3,$4,$5,$6,$7,$8,$9,$10}' | fold -w50}
 $stippled_hr
-                          |\      _,,,---,,_
-                          /,`.-'`'    -.  ;-;;,_
-                         |,4-  ) )-,_..;\ (  `'-'
-                        '---''(_/--'  `-'\_)
+                              .            .
+                              |            |
+                             |||          |||
+                           .|| ||.      .|| ||.
+                        .:||| | |||:..:||| | |||:.
+                         C i s c o  S y s t e m s

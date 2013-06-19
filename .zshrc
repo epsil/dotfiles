@@ -1,6 +1,7 @@
 # Set up the prompt
 
 export PATH=$PATH:$HOME/.cabal/bin
+export EDITOR=vim
 export TERM=xterm-256color
 
 autoload +XU colors
