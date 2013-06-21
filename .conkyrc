@@ -37,14 +37,14 @@ alignment bottom_right
 gap_x 40
 gap_y 40
 minimum_size 300 600
-# maximum_width 300
-# text_buffer_size 1024
+maximum_width 300
+text_buffer_size 1024
 
 # Stuff after "TEXT" is formatted on screen
 
 TEXT
 
-$nodename $alignr $sysname $kernel ($machine) @ MBA
+$nodename $alignr $sysname $kernel ($machine) @ T61
 $stippled_hr
 Uptime: $uptime $alignr Load: $cpu% ($loadavg)
 ${cpugraph cpu0 15}${voffset -7}
@@ -58,8 +58,8 @@ $stippled_hr
 ${font DejaVu Sans Mono:size=8}/$font${tab 20}${fs_free /}/${fs_size /} $alignr(${fs_free_perc /}%)     ${fs_bar 5,120 /}
 ${font DejaVu Sans Mono:size=8}/home$font${tab 20}${fs_free /home}/${fs_size /home} $alignr(${fs_free_perc /home}%)     ${fs_bar 5,120 /home}
 $stippled_hr
-Down: ${downspeed eth0}/s $alignr Up: ${upspeed eth0}/s
-${downspeedgraph eth0 15,135 -l}$alignr${upspeedgraph eth0 15,135 -l}
+Down: ${downspeed wlan0}/s $alignr Up: ${upspeed wlan0}/s
+${downspeedgraph wlan0 15,135 -l}$alignr${upspeedgraph wlan0 15,135 -l}
 ${voffset -7}$stippled_hr${font DejaVu Sans Mono:size=8}
 ${top name 1} $alignr${top pid 1}   ${top cpu 1}   ${top mem 1}
 ${top name 2} $alignr${top pid 2}   ${top cpu 2}   ${top mem 2}
