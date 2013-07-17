@@ -1,0 +1,11 @@
+!Mac-like Fn bindings for the ThinkPad T61
+!xmodmap ~/.Xmodmap
+
+!keycode 171 = XF86AudioNext
+keycode 171 = End
+!keycode 172 = XF86AudioPlay
+keycode 172 = Next
+!keycode 173 = XF86AudioPrev
+keycode 173 = Home
+!keycode 174 = XF86AudioStop
+keycode 174 = Prior
