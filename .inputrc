@@ -1,0 +1,21 @@
+$include /etc/inputrc
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set page-completions off
+set completion-ignore-case on
+set completion-map-case on
+set completion-prefix-display-length 2
+#dumme gdb takler ikke Control-j
+$if Gdb
+$else
+Control-j: menu-complete
+Control-k: menu-complete-backward
+$endif
+$if Bash
+# edit the path
+"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+$endif
+$if Bash
+# edit the path
+"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+$endif
