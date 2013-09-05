@@ -1,6 +1,7 @@
 # TODO: define aliases for utilities in /snacks/bin
 
 alias eclipse='/snacks/bin/eclipse'
+alias vi=vim
 
 # enable color support of ls and also add handy aliases
 alias ls='ls --color=auto'
