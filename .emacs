@@ -219,7 +219,7 @@ See `sort-words'."
   (c-set-offset 'substatement-open 0)
   ;; (c-set-offset 'case-label '+)
   (setq indent-tabs-mode nil ; t
-        tab-width 4 ; 2
+        tab-width 2 ; 4
         ))
 
 (add-hook 'java-mode-hook 'c-indent-hook)
