@@ -26,6 +26,10 @@
 
 ;; TODO: remove duplicates
 
+(require srfi/13)
+(require racket/dict)
+(require racket/mpair)
+
 ;; Chain playlists together
 (define (playlists-join . xs)
   (apply append xs))
@@ -58,6 +62,7 @@
             (apply playlists-merge-shuffle
                    (cons (cdr (car xs)) (cdr xs))))))))
 
+;; Interleave playlists by randomly alternating between them fairly
 (define (playlists-merge-shuffle-fair . xs)
   (let ((xs (shuffle-fairly (remove '() xs))))
     (cond
@@ -66,6 +71,142 @@
      (else
       (append (map car xs) ; fair
               (apply playlists-merge-shuffle (map cdr xs)))))))
+
+;; Split a playlist into several playlists (artists, albums, etc.)
+(define (playlists-split . xs)
+  (let* ((xs (apply playlists-join xs))
+         (prefix (string-prefix xs)))
+    (define (find-key str)
+      (let ((regexp (format "^~a([^/]+)" (regexp-quote prefix))))
+        (match (regexp-match regexp str)
+          [(list prefix key matches ...)
+           key]
+          [_ ""])))
+    ;; (define (insert lst key val)
+    ;;   (let ((pair (massoc key lst)))
+    ;;     (match pair
+    ;;       [(mcons key v)
+    ;;        (set-mcdr! pair (mappend v (mlist val)))
+    ;;        lst]
+    ;;       [_ (mappend lst (mlist (mcons key (mlist val))))])))
+    (define (insert lst key val)
+      (if (assoc key lst)
+          (map (lambda (pair)
+                 (if (equal? (car pair) key)
+                     (cons key (append (cdr pair) (list val)))
+                     pair))
+               lst)
+          (append lst (list (cons key (list val))))))
+    (define (split xs acc)
+      (if (null? xs)
+          (map cdr acc)
+          (let* ((x (car xs))
+                 (xs (cdr xs))
+                 (key (find-key x)))
+            (split xs (insert acc key x)))))
+    (split xs '())))
+
+;; Interleave m playlists at once
+(define (playlists-merge-window m . xs)
+  (define (merge window queue)
+    (cond
+     ((member '() window)
+      (merge (remove '() window) queue))
+     ((and (not (null? queue))
+           (or (< (length window) m) (<= m 0)))
+      (merge (append window (list (car queue)))
+             (cdr queue)))
+     ((null? window)
+      '())
+     (else
+      (append (map car window)
+              (merge (map cdr window) queue)))))
+  (merge '() xs))
+
+;; Randomly interleave m playlists at once
+(define (playlists-merge-window-shuffle m . xs)
+  (define (merge window queue)
+    (cond
+     ((member '() window)
+      (merge (remove '() window) queue))
+     ((and (not (null? queue))
+           (or (< (length window) m) (<= m 0)))
+      (merge (append window (list (car queue)))
+             (cdr queue)))
+     ((null? window)
+      '())
+     (else
+      (let ((window (shuffle-fairly window)))
+        (append (map car window)
+                (merge (map cdr window) queue))))))
+  (merge '() xs))
+
+;; Trim playlists to n elements at a time
+(define (playlists-trim n . xs)
+  (define (trim xs)
+    (cond
+     ((null? xs)
+      '())
+     ((member '() xs)
+      (trim (remove '() xs)))
+     (else
+      (append (map (lambda (lst)
+                     (take lst (min n (length lst))))
+                   xs)
+              (trim (map (lambda (lst)
+                           (drop lst (min n (length lst))))
+                         xs))))))
+  (trim xs))
+
+;; Create an increasing buffer of playlists
+(define (playlists-increasing-gradient m . xs)
+  (define (gradient n xs)
+    (cond
+     ((null? xs)
+      (values '() '()))
+     ((> n m)
+      (values '() xs))
+     (else
+      (let*-values (((x) (car xs))
+                    ((y z) (split-at x (min n (length x))))
+                    ((ys zs) (gradient (+ n 1) (cdr xs))))
+        (values (cons y ys) (cons z zs))))))
+  (let*-values (((y z) (gradient 1 xs)))
+    (append y z)))
+
+;; Create an decreasing buffer of playlists
+(define (playlists-decreasing-gradient m . xs)
+  (define (gradient n xs)
+    (cond
+     ((null? xs)
+      (values '() '()))
+     ((>= n m)
+      (values '() xs))
+     (else
+      (let*-values (((x) (car xs))
+                    ((y z) (split-at x (min (- m n) (length x))))
+                    ((ys zs) (gradient (+ n 1) (cdr xs))))
+        (values (cons y ys) (cons z zs))))))
+  (let*-values (((y z) (gradient 0 xs)))
+    (append y z)))
+
+;; Interleave n tracks from m playlists at once
+(define (playlists-merge-window-trimmed m n . xs)
+  (apply playlists-merge-window m
+         (apply playlists-trim n
+                (apply playlists-decreasing-gradient m xs))))
+
+;; Randomly interleave n tracks from m playlists at once
+(define (playlists-merge-window-trimmed-shuffle m n . xs)
+  (apply playlists-merge-window-shuffle m
+         (apply playlists-trim n
+                ;; (apply playlists-decreasing-gradient m xs)
+                xs)))
+
+;; "Normalize" a mixed playlist by merging five artists at a time
+(define (playlists-normalize . xs)
+  (apply playlists-merge-window-trimmed-shuffle 5 5
+         (apply playlists-split xs)))
 
 ;; Interleave two playlists in preference of unique elements.
 ;; Elements unique to XS are picked over elements unique to YS,
@@ -143,6 +284,30 @@
     (overlay2 xs-orig ys-orig))
   (foldl overlay '() xs))
 
+;; (playlists-decreasing-gradient 3
+;;                 '("en" "to" "tre" "fire")
+;;                 '("one" "two" "three" "four")
+;;                 '("foo" "bar" "baz" "quux")
+;;                 '("la" "dee" "da")
+;;                 '("ein" "zwei" "drei")
+;;                 '("jau" "jo" "jepp"))
+
+;; (playlists-merge-window-shuffle 2
+;;                 '("en" "to" "tre" "fire")
+;;                 '("one" "two" "three" "four")
+;;                 '("foo" "bar" "baz" "quux")
+;;                 '("la" "dee" "da")
+;;                 '("ein" "zwei" "drei")
+;;                 '("jau" "jo" "jepp"))
+
+;; (playlists-merge-window-trimmed-shuffle 3 3
+;;                 '("en" "to" "tre" "fire")
+;;                 '("one" "two" "three" "four")
+;;                 '("foo" "bar" "baz" "quux")
+;;                 '("la" "dee" "da")
+;;                 '("ein" "zwei" "drei")
+;;                 '("jau" "jo" "jepp"))
+
 ;; Utility functions
 
 ;; Randomly permute the elements of LST.
@@ -158,6 +323,27 @@
   (if (<= (length lst) 2)
       (shuffle lst)
       (fair-shuffle lst)))
+
+;; Find the common string prefix of a list of strings.
+(define (string-prefix lst)
+  (cond
+   ((null? lst)
+    "")
+   ((eq? (length lst) 1)
+    (car lst))
+   (else
+    (foldl (lambda (str1 str2)
+             (cond
+              ((equal? str1 "")
+               str2)
+              ((equal? str2 "")
+               str1)
+              (else
+               (let ((len (string-prefix-length str1 str2)))
+                 (if (> len 0)
+                     (substring str1 0 len)
+                     "")))))
+           "" lst))))
 
 ;; Command line parsing
 
@@ -179,6 +365,8 @@
      playlists-merge-unique]
     [(or "overlay" "overlay-merge" "overlay-interleave" "interleave-overlay" "merge-overlay")
      playlists-merge-overlay]
+    [(or "normalize")
+     playlists-normalize]
     [else
      playlists-merge-shuffle-fair]))
 
