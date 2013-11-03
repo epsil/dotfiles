@@ -36,7 +36,7 @@
 
 ;; Create a randomized playlist
 (define (playlists-shuffle . xs)
-  (shuffle-fairly (apply playlists-join xs)))
+  (shuffle-unique (apply playlists-join xs)))
 
 (define (playlists-shuffle-fair . xs)
   (apply playlists-merge-shuffle-fair (map playlists-shuffle xs)))
@@ -53,7 +53,7 @@
 
 ;; Interleave playlists by randomly alternating between them
 (define (playlists-merge-shuffle . xs)
-  (let ((xs (shuffle-fairly (remove '() xs))))
+  (let ((xs (shuffle-unique (remove '() xs))))
     (cond
      ((null? xs)
       xs)
@@ -64,7 +64,7 @@
 
 ;; Interleave playlists by randomly alternating between them fairly
 (define (playlists-merge-shuffle-fair . xs)
-  (let ((xs (shuffle-fairly (remove '() xs))))
+  (let ((xs (shuffle-unique (remove '() xs))))
     (cond
      ((null? xs)
       xs)
@@ -125,21 +125,43 @@
 
 ;; Randomly interleave m playlists at once
 (define (playlists-merge-window-shuffle m . xs)
-  (define (merge window queue)
+  (define (random-generator)
+    (let ((queue '()))
+      (lambda (k)
+        (cond
+         ((<= k 0)
+          (let ((k (abs k)))
+            (set! queue (remove k queue))
+            (set! queue (map (lambda (x) (if (> x k) (- x 1) x))
+                             queue))))
+         (else
+          (let ((x (random k)))
+            (do () ((not (member x queue)))
+              (set! x (random k)))
+            (set! queue (append queue (list x)))
+            (when (> (length queue) (/ k 2))
+              (set! queue (cdr queue)))
+            x))))))
+  (define (merge window queue random acc)
     (cond
      ((member '() window)
-      (merge (remove '() window) queue))
+      (let ((pos (- (length window) (length (member '() window)))))
+        (random (- pos))
+        (merge (remove '() window) queue random acc)))
      ((and (not (null? queue))
            (or (< (length window) m) (<= m 0)))
       (merge (append window (list (car queue)))
-             (cdr queue)))
+             (cdr queue) random acc))
      ((null? window)
-      '())
+      acc)
      (else
-      (let ((window (shuffle-fairly window)))
-        (append (map car window)
-                (merge (map cdr window) queue))))))
-  (merge '() xs))
+      (let ((pos (random (length window))))
+        (merge (append (take window pos)
+                       (list (cdr (list-ref window pos)))
+                       (drop window (+ pos 1)))
+               queue random
+               (append acc (list (car (list-ref window pos)))))))))
+  (merge '() xs (random-generator) '()))
 
 ;; Trim playlists to n elements at a time
 (define (playlists-trim n . xs)
@@ -193,15 +215,12 @@
 ;; Interleave n tracks from m playlists at once
 (define (playlists-merge-window-trimmed m n . xs)
   (apply playlists-merge-window m
-         (apply playlists-trim n
-                (apply playlists-decreasing-gradient m xs))))
+         (apply playlists-trim n xs)))
 
 ;; Randomly interleave n tracks from m playlists at once
 (define (playlists-merge-window-trimmed-shuffle m n . xs)
   (apply playlists-merge-window-shuffle m
-         (apply playlists-trim n
-                ;; (apply playlists-decreasing-gradient m xs)
-                xs)))
+         (apply playlists-trim n xs)))
 
 ;; "Normalize" a mixed playlist by merging five artists at a time
 (define (playlists-normalize . xs)
@@ -310,9 +329,36 @@
 
 ;; Utility functions
 
+;; Generate random numbers with fair distribution.
+(define (my-random-generator)
+  (let ((queue '()))
+    (lambda (k)
+      (let ((x (random k)))
+        (do () ((not (member x queue)))
+          (display "random")
+          (set! x (random k)))
+        (set! queue (append queue (list x)))
+        (when (> (length queue) (/ k 2))
+          (set! queue (cdr queue)))
+        x))))
+
+;; Shuffle a list fairly.
+(define shuffle-fairly-generator (my-random-generator))
+(define (shuffle-fairly lst)
+  (define (permute lst pos)
+    (cond
+     ((= pos 0)
+      lst)
+     (else
+      (cons (list-ref lst pos)
+            (append (take lst pos)
+                    (drop lst (+ pos 1)))))))
+  (let ((pos (shuffle-fairly-generator (length lst))))
+    (permute lst pos)))
+
 ;; Randomly permute the elements of LST.
 ;; Ensure that a different list is returned.
-(define (shuffle-fairly lst)
+(define (shuffle-unique lst)
   (define (fair-shuffle lst)
     (let ((newlst (shuffle lst)))
       (if (equal? newlst lst)
