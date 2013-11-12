@@ -4,11 +4,6 @@
 
 # alias emacs='/local/bin/emacs'
 
-export PATH=/local/X11/bin/:/local/bin:$PATH:/hom/inf3151/tools/bin
-export LANG=nb_NO.UTF-8
-export LC_ALL=nb_NO.UTF-8
-export EDITOR=vi
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 

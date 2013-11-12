@@ -1,7 +1,7 @@
-# Set up the prompt
-
-export PATH=$PATH:$HOME/.cabal/bin
-export TERM=xterm-256color
+# Profile
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile
+fi
 
 autoload +XU colors
 autoload -Uz promptinit
