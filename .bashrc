@@ -2,8 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export PATH=$HOME/.cabal/bin:$PATH
-export TERM=xterm-256color
+if [ -f ~/.bash_env ]; then
+    . ~/.bash_env
+fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return

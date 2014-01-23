@@ -1,7 +1,8 @@
 # Set up the prompt
 
-export PATH=$PATH:$HOME/.cabal/bin
-export TERM=xterm-256color
+if [ -f ~/.bash_env ]; then
+    . ~/.bash_env
+fi
 
 autoload +XU colors
 autoload -Uz promptinit
@@ -11,6 +12,8 @@ prompt suse
 setopt histignorealldups histignorespace sharehistory
 setopt bash_auto_list list_ambiguous
 setopt extendedglob
+unsetopt PROMPT_CR
+unsetopt PROMPT_SP
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
@@ -32,7 +35,7 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
+# eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -56,7 +59,7 @@ fi
 PS1=$'%{\e[01;32m%}%n@%m%{\e[0m%}:%{\e[01;34m%}%~%{\e[0m%}$ '
 
 # command-not-found (overrides preexec and precmd)
-. /etc/zsh_command_not_found
+# . /etc/zsh_command_not_found
 
 # Ctrl-X Ctrl-E
 autoload edit-command-line
