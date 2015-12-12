@@ -5,3 +5,5 @@
 	ui = auto
 [gui]
 	spellingdictionary = en_US
+[push]
+	default = simple
