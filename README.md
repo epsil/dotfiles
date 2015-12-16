@@ -1,1 +1,3 @@
 Various configuration files.
+
+Managed using [rcm](http://thoughtbot.github.io/rcm/rcm.7.html).
