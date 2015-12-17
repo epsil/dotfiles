@@ -8,8 +8,16 @@ set hlsearch
 set textwidth=70
 set shiftwidth=4
 set nojoinspaces
+set expandtab
 set cursorline
 set mouse=a
+syntax on
+
+set encoding=utf-8
+set guifont=Consolas:h10
+
+set autoindent
+set smartindent
 
 map <Tab> <Esc>
 imap <Tab> <Esc>
