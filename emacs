@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp -*-
 ;; ~/.Xresources: Emacs.font: DejaVu Sans Mono-9
 ;; !!! Remember to xrdb -merge ~/.Xresources !!!
 ;; (set-frame-font "DejaVu Sans Mono-9")
