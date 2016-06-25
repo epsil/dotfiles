@@ -2,7 +2,7 @@
 ;; ~/.Xresources: Emacs.font: DejaVu Sans Mono-9
 ;; !!! Remember to xrdb -merge ~/.Xresources !!!
 ;; (set-frame-font "DejaVu Sans Mono-9")
-;; (set-frame-font "Consolas-10") ; a little variation
+(set-frame-font "Consolas-13") ; a little variation
 ;; (set-frame-font "Ubuntu Mono-10.5")
 (setq ns-alternate-modifier 'none)
 (setq ns-command-modifier   'meta)
@@ -20,6 +20,8 @@
   (set-face-foreground 'region nil)
   (set-face-background 'region "lightgoldenrod2"))
 (set-face-attribute 'fixed-pitch nil :family 'unspecified)
+;; (setq visible-bell t)
+(setq ring-bell-function 'ignore)
 
 (setq user-full-name nil)
 (setq auto-window-vscroll nil)
@@ -74,7 +76,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (when (window-system)
-  (set-frame-height (selected-frame) 53))
+  (set-frame-height (selected-frame) 46))
 
 ;; (global-set-key (kbd "M-2") "@")
 ;; (global-set-key (kbd "M-3") "£")
@@ -118,12 +120,13 @@
   (save-excursion
     (unless (region-active-p)
       (mark-whole-buffer))
-    (untabify (region-beginning) (region-end))
-    (unless (eq 'text-mode major-mode)
-      (indent-region (region-beginning) (region-end)))
-    (save-restriction
-      (narrow-to-region (region-beginning) (region-end))
-      (delete-trailing-whitespace))
+    ;; (untabify (region-beginning) (region-end))
+    ;; (unless (eq 'text-mode major-mode)
+    ;;   (indent-region (region-beginning) (region-end)))
+    ;; (save-restriction
+    ;;   (narrow-to-region (region-beginning) (region-end))
+    ;;   (delete-trailing-whitespace))
+    (asciify (region-beginning) (region-end))
     (if (buffer-modified-p)
         (message "\"Whatever am I going to do with you?\"")
       (message "\"If we don't clean it, it's not dirty!\""))))
@@ -293,7 +296,7 @@ See `sort-words'."
 
 ;; Diskusjon
 (require 'diskusjon)
-(setq diskusjon-lang "norsk" ; "english"
+(setq diskusjon-lang "english" ; "norsk"
       diskusjon-ascii t)
 (define-key diskusjon-mode-map "\C-cm" 'mediawiki-mode)
 (define-key diskusjon-mode-map "\C-cM" 'markdown-mode)
@@ -752,6 +755,13 @@ See `sort-words'."
     (replace-regexp "•" "*" nil beg end)
     (replace-regexp "\\$" "$" nil beg end)
     (replace-regexp "\n\n\n*" "\n\n" nil beg end)
+    (replace-regexp "[ā]" "a" nil beg end)
+    (replace-regexp "[ḍ]" "d" nil beg end)
+    (replace-regexp "[ṇ]" "n" nil beg end)
+    (replace-regexp "[ṛ]" "r" nil beg end)
+    (replace-regexp "[śṣ]" "s" nil beg end)
+    (replace-regexp "[ṭ]" "t" nil beg end)
+    (replace-regexp "[ī]" "i" nil beg end)
     (delete-trailing-whitespace beg end)))
 
 (defalias 'ascify 'asciify)
@@ -800,3 +810,5 @@ See `sort-words'."
                 '(font-lock-mode -1)
               'post-command-hook
               nil t)))
+
+(global-set-key [remap redo] 'undo-tree-redo)
