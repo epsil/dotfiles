@@ -299,7 +299,7 @@ See `sort-words'."
 (setq diskusjon-lang "english" ; "norsk"
       diskusjon-ascii t)
 (define-key diskusjon-mode-map "\C-cm" 'mediawiki-mode)
-(define-key diskusjon-mode-map "\C-cM" 'markdown-mode)
+;; (define-key diskusjon-mode-map "\C-cM" 'markdown-mode)
 
 (defun words ()
   (interactive)
@@ -585,6 +585,8 @@ See `sort-words'."
 (require 'package)
 (add-to-list 'package-archives
   '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+  '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 ;; You don't need this one if you have marmalade:
 ;; (add-to-list 'package-archives
 ;;  '("geiser" . "http://download.savannah.gnu.org/releases/geiser/packages"))
@@ -728,15 +730,18 @@ See `sort-words'."
         ad-do-it)
     ad-do-it))
 
-(eval-after-load 'markdown-mode
-  '(define-key markdown-mode-map "\"" 'diskusjon-double-quote))
+;; (eval-after-load 'markdown-mode
+;;   '(define-key markdown-mode-map "\"" 'diskusjon-double-quote))
 
+;; (add-hook 'markdown-mode-hook
+;;           (lambda ()
+;;             (if (string-match "wiki\\|gollum" (or (buffer-file-name) ""))
+;;                 (visual-line-mode 1)
+;;               (turn-on-auto-fill))))
 (add-hook 'markdown-mode-hook
           (lambda ()
-            (if (string-match "wiki\\|gollum" (or (buffer-file-name) ""))
-                (visual-line-mode 1)
-              (turn-on-auto-fill))))
-(add-hook 'markdown-mode-hook #'turn-on-diskusjon-punctuation-mode)
+            (visual-line-mode 1)))
+;; (add-hook 'markdown-mode-hook #'turn-on-diskusjon-punctuation-mode)
 
 (add-hook 'latex-mode-hook 'turn-on-auto-fill)
 
@@ -766,19 +771,19 @@ See `sort-words'."
 
 (defalias 'ascify 'asciify)
 
-(define-skeleton markdown-url
-  "Hyperlenke."
-  nil
-  "[" _ "]"
-  (let ((v1 (diskusjon-trim (skeleton-read "URL: "))))
-    (format "(%s)" v1)))
+;; (define-skeleton markdown-url
+;;   "Hyperlenke."
+;;   nil
+;;   "[" _ "]"
+;;   (let ((v1 (diskusjon-trim (skeleton-read "URL: "))))
+;;     (format "(%s)" v1)))
 
 (evil-define-text-object evil-inner-asterisk (count &optional beg end type)
   "Select inner double-asterisked expression."
   :extend-selection nil
   (evil-quote-range count beg end type ?\* ?\* t))
 
-(define-key evil-visual-state-map ",u" 'markdown-url)
+;; (define-key evil-visual-state-map ",u" 'markdown-url)
 (define-key evil-visual-state-map "i*" 'evil-inner-asterisk)
 
 ;; (defadvice markdown-mode (after font-lock activate)
@@ -796,19 +801,19 @@ See `sort-words'."
 ;;   (font-lock-mode -1)
 ;;   (remove-hook 'post-command-hook 'markdown-mode-helper t))
 
-(eval-after-load 'markdown-mode
-  '(progn
-     (define-key markdown-mode-map "\C-c\C-f" nil)
-     (define-key markdown-mode-map "\C-c\C-fb" 'markdown-insert-bold)
-     (define-key markdown-mode-map "\C-c\C-f\C-b" 'markdown-insert-bold)
-     (define-key markdown-mode-map "\C-c\C-fe" 'markdown-insert-italic)
-     (define-key markdown-mode-map "\C-c\C-f\C-e" 'markdown-insert-italic)))
+;; (eval-after-load 'markdown-mode
+;;   '(progn
+;;      (define-key markdown-mode-map "\C-c\C-f" nil)
+;;      (define-key markdown-mode-map "\C-c\C-fb" 'markdown-insert-bold)
+;;      (define-key markdown-mode-map "\C-c\C-f\C-b" 'markdown-insert-bold)
+;;      (define-key markdown-mode-map "\C-c\C-fe" 'markdown-insert-italic)
+;;      (define-key markdown-mode-map "\C-c\C-f\C-e" 'markdown-insert-italic)))
 
-(add-hook 'markdown-mode-hook
-          (lambda ()
-            (evil-delay t
-                '(font-lock-mode -1)
-              'post-command-hook
-              nil t)))
+;; (add-hook 'markdown-mode-hook
+;;           (lambda ()
+;;             (evil-delay t
+;;                 '(font-lock-mode -1)
+;;               'post-command-hook
+;;               nil t)))
 
 (global-set-key [remap redo] 'undo-tree-redo)
