@@ -7,3 +7,6 @@
 	spellingdictionary = en_US
 [push]
 	default = simple
+[core]
+	editor = emacs
+	longpaths = true
