@@ -1,8 +1,7 @@
-;; -*- mode: emacs-lisp -*-
 ;; ~/.Xresources: Emacs.font: DejaVu Sans Mono-9
 ;; !!! Remember to xrdb -merge ~/.Xresources !!!
 ;; (set-frame-font "DejaVu Sans Mono-9")
-(set-frame-font "Consolas-13") ; a little variation
+(set-frame-font "Consolas-10.5") ; a little variation
 ;; (set-frame-font "Ubuntu Mono-10.5")
 (setq ns-alternate-modifier 'none)
 (setq ns-command-modifier   'meta)
@@ -20,8 +19,6 @@
   (set-face-foreground 'region nil)
   (set-face-background 'region "lightgoldenrod2"))
 (set-face-attribute 'fixed-pitch nil :family 'unspecified)
-;; (setq visible-bell t)
-(setq ring-bell-function 'ignore)
 
 (setq user-full-name nil)
 (setq auto-window-vscroll nil)
@@ -76,7 +73,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (when (window-system)
-  (set-frame-height (selected-frame) 46))
+  (set-frame-height (selected-frame) 35))
 
 ;; (global-set-key (kbd "M-2") "@")
 ;; (global-set-key (kbd "M-3") "£")
@@ -218,6 +215,8 @@ See `sort-words'."
             (c-set-offset 'func-decl-cont '++)
             (modify-syntax-entry ?@ "< b" java-mode-syntax-table)))
 (modify-coding-system-alist 'file "\\.java$" 'utf-8)
+(modify-coding-system-alist 'file "\\.txt$" 'utf-8)
+(modify-coding-system-alist 'file "\\.md$" 'utf-8)
 (setq cua-auto-tabify-rectangles nil)
 (defadvice align (around smart-tabs activate)
   (let ((indent-tabs-mode nil)) ad-do-it))
@@ -260,8 +259,10 @@ See `sort-words'."
 (add-hook 'java-mode-hook 'c-indent-hook)
 (add-hook 'c-mode-common-hook 'c-indent-hook)
 (add-to-list 'auto-mode-alist '("\\.glsl" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.scss" . css-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cu" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.cup" . text-mode))
+(add-to-list 'auto-mode-alist '("\\.cs$" . java-mode))
 
 ;; temp fix for Greasemonkey scripts
 ;; from Sylecn's ~/.emacs file
@@ -274,7 +275,7 @@ See `sort-words'."
 	   `((,js--regexp-literal-fix (1 "|") (2 "|"))))
      (setq js-font-lock-syntactic-keywords js-font-lock-syntactic-keywords-fix)))
 
-(setq js-indent-level 2)
+(setq js-indent-level 2) ; 4
 
 ;; Scala
 (require 'scala-mode-auto)
@@ -292,6 +293,8 @@ See `sort-words'."
   "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.txt" . markdown-mode) auto-mode-alist))
 ;; (add-hook 'markdown-mode-hook #'visual-line-mode)
 
 ;; Diskusjon
@@ -303,21 +306,21 @@ See `sort-words'."
 
 (defun words ()
   (interactive)
+  (diskusjon-mode)
   (setq diskusjon-lang "norsk"
-        diskusjon-ascii nil)
-  (diskusjon-mode))
+        diskusjon-ascii t))
 
 (defun words-en ()
   (interactive)
+  (diskusjon-mode)
   (setq diskusjon-lang "english"
-        diskusjon-ascii t)
-  (diskusjon-mode))
+        diskusjon-ascii t))
 
 ;; MediaWiki
 (require 'mediawiki)
 (add-to-list 'auto-mode-alist '("\\.\\(media\\)?wiki$" . mediawiki-mode))
 (add-hook 'mediawiki-mode-hook #'turn-on-visual-line-mode)
-(add-hook 'mediawiki-mode-hook #'turn-on-diskusjon-punctuation-mode)
+;; (add-hook 'mediawiki-mode-hook #'turn-on-diskusjon-punctuation-mode)
 
 ;; LaTeX/AUCTeX
 ;; (add-to-list 'load-path "/usr/share/emacs24/site-lisp/auctex")
@@ -584,16 +587,19 @@ See `sort-words'."
 ;; ELPA
 (require 'package)
 (add-to-list 'package-archives
-  '("marmalade" . "http://marmalade-repo.org/packages/"))
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
-  '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 ;; You don't need this one if you have marmalade:
 ;; (add-to-list 'package-archives
 ;;  '("geiser" . "http://download.savannah.gnu.org/releases/geiser/packages"))
 (package-initialize)
-
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
 
 (setq password-cache-expiry nil)
 
@@ -733,15 +739,13 @@ See `sort-words'."
 ;; (eval-after-load 'markdown-mode
 ;;   '(define-key markdown-mode-map "\"" 'diskusjon-double-quote))
 
-;; (add-hook 'markdown-mode-hook
-;;           (lambda ()
-;;             (if (string-match "wiki\\|gollum" (or (buffer-file-name) ""))
-;;                 (visual-line-mode 1)
-;;               (turn-on-auto-fill))))
 (add-hook 'markdown-mode-hook
           (lambda ()
+            ;; (if (string-match "wiki\\|gollum" (or (buffer-file-name) ""))
+            ;;     (visual-line-mode 1)
+            ;;   (turn-on-auto-fill))
             (visual-line-mode 1)))
-;; (add-hook 'markdown-mode-hook #'turn-on-diskusjon-punctuation-mode)
+(add-hook 'markdown-mode-hook #'turn-on-diskusjon-punctuation-mode)
 
 (add-hook 'latex-mode-hook 'turn-on-auto-fill)
 
@@ -754,20 +758,21 @@ See `sort-words'."
     (replace-regexp "[‘’´]" "'" nil beg end)
     (replace-regexp "″" "\"" nil beg end)
     (replace-regexp "−" "-" nil beg end)
-    (replace-regexp "–" "--" nil beg end)
+    (replace-regexp "[–―]" "--" nil beg end)
     (replace-regexp "—" "---" nil beg end)
     (replace-regexp "…" "..." nil beg end)
     (replace-regexp "•" "*" nil beg end)
+    (replace-regexp "→" "->" nil beg end)
     (replace-regexp "\\$" "$" nil beg end)
     (replace-regexp "\n\n\n*" "\n\n" nil beg end)
-    (replace-regexp "[ā]" "a" nil beg end)
-    (replace-regexp "[ḍ]" "d" nil beg end)
-    (replace-regexp "[ṇ]" "n" nil beg end)
-    (replace-regexp "[ṛ]" "r" nil beg end)
-    (replace-regexp "[śṣ]" "s" nil beg end)
-    (replace-regexp "[ṭ]" "t" nil beg end)
-    (replace-regexp "[ī]" "i" nil beg end)
     (delete-trailing-whitespace beg end)))
+
+(defun htmlcleanup (beg end)
+  "Remove tags."
+  (interactive "r")
+  (save-excursion
+    (replace-regexp "<[^>]*>" "" nil beg end)
+    (asciify beg end)))
 
 (defalias 'ascify 'asciify)
 
@@ -816,4 +821,11 @@ See `sort-words'."
 ;;               'post-command-hook
 ;;               nil t)))
 
-(global-set-key [remap redo] 'undo-tree-redo)
+(require 'powershell-mode)
+(add-to-list 'auto-mode-alist '("\\.ps1" . powershell-mode))
+
+(defun unhex-region (beg end)
+  (interactive "r")
+  (let ((str (url-unhex-string (buffer-substring beg end))))
+    (delete-region beg end)
+    (insert str)))
