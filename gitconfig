@@ -10,3 +10,12 @@
 [core]
 	editor = emacs
 	longpaths = true
+	autocrlf = false
+[merge]
+	tool = unityyamlmerge
+[mergetool "unityyamlmerge"]
+	trustExitCode = false
+	keepTemporaries = true
+	keepBackup = false
+	path = "C:/Program Files/Unity HoloLens 5.4.0f3-HTP/Editor/Data/Tools/UnityYAMLMerge.exe"
+	cmd = \"C:/Program Files/Unity HoloLens 5.4.0f3-HTP/Editor/Data/Tools/UnityYAMLMerge.exe\" merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
