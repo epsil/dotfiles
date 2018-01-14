@@ -4,7 +4,7 @@
 # fi
 
 # alias ls='ls --color=auto'
-alias ls='ls -GFh'
+alias ls='ls -GFh --color=auto'
 # alias dir='dir --color=auto'
 # alias vdir='vdir --color=auto'
 
