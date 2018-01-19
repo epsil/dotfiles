@@ -5,7 +5,7 @@ set showcmd
 set ignorecase
 set incsearch
 set hlsearch
-set textwidth=70
+"set textwidth=70
 set shiftwidth=4
 set nojoinspaces
 set expandtab
