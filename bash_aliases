@@ -23,6 +23,12 @@ alias u='cd ..'
 alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
+alias uuuuu='cd ../../../../..'
+alias uuuuuu='cd ../../../../../..'
+alias uuuuuuu='cd ../../../../../../..'
+alias uuuuuuuu='cd ../../../../../../../..'
+alias uuuuuuuuu='cd ../../../../../../../../..'
+alias uuuuuuuuuu='cd ../../../../../../../../../..'
 
 # emacs
 alias vii='emacs -nw'

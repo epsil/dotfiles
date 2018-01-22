@@ -10,6 +10,7 @@
 [core]
 	editor = emacs
 	longpaths = true
+	autocrlf = false
 [merge]
 	tool = unityyamlmerge
 [mergetool "unityyamlmerge"]
