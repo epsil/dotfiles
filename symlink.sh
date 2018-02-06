@@ -1,10 +1,11 @@
 #!/bin/sh
-ln -b -s ~/dotfiles/bash_aliases ~/.bash_aliases
-ln -b -s ~/dotfiles/bash_env ~/.bash_env
-ln -b -s ~/dotfiles/bashrc ~/.bashrc
-ln -b -s ~/dotfiles/gitconfig ~/.gitconfig
-ln -b -s ~/dotfiles/rcrc ~/.rcrc
-ln -b -s ~/dotfiles/vimrc ~/.vimrc
-ln -b -s ~/dotfiles/zshrc ~/.zshrc
-ln -b -s ~/dotfiles/emacs ~/.emacs
-ln -b -s ~/dotfiles/emacs.d ~/.emacs.d
+DOTFILES=$(cd `dirname $0` && pwd)
+ln -b -s $DOTFILES/bash_aliases ~/.bash_aliases
+ln -b -s $DOTFILES/bash_env ~/.bash_env
+ln -b -s $DOTFILES/bashrc ~/.bashrc
+ln -b -s $DOTFILES/gitconfig ~/.gitconfig
+ln -b -s $DOTFILES/rcrc ~/.rcrc
+ln -b -s $DOTFILES/vimrc ~/.vimrc
+ln -b -s $DOTFILES/zshrc ~/.zshrc
+ln -b -s $DOTFILES/emacs ~/.emacs
+ln -b -s $DOTFILES/emacs.d ~/.emacs.d
