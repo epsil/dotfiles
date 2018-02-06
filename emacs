@@ -452,6 +452,8 @@ See `sort-words'."
 (define-key evil-visual-state-map ",x" 'diskusjon-strike)
 (define-key evil-visual-state-map ",p" 'diskusjon-code-tag)
 
+(evil-ex-define-cmd "c" 'cleaner)
+
 ;; surround
 (require 'surround)
 (global-surround-mode 1)
