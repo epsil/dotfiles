@@ -19,11 +19,11 @@ set guifont=Consolas:h10
 set autoindent
 set smartindent
 
-map <Tab> <Esc>
-imap <Tab> <Esc>
-vmap <Tab> <Esc>
+"map <Tab> <Esc>
+"imap <Tab> <Esc>
+"vmap <Tab> <Esc>
 
-map ¤ $
+"map ¤ $
 map æ [{
 map Æ }
 map ø `

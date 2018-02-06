@@ -34,10 +34,13 @@ alias uuuuuuuuuu='cd ../../../../../../../../../..'
 alias vii='emacs -nw'
 
 # wiki
-alias wiki='cd ~/wiki'
+alias wiki='cd ~/wiki && git status'
 
 # open
 alias open='xdg-open'
+
+# lame jokes
+alias brexit='exit'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
