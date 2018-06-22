@@ -1,7 +1,7 @@
 ;; ~/.Xresources: Emacs.font: DejaVu Sans Mono-9
 ;; !!! Remember to xrdb -merge ~/.Xresources !!!
 ;; (set-frame-font "DejaVu Sans Mono-9")
-;; (set-frame-font "Consolas-10.5") ; a little variation
+(set-frame-font "Consolas-10.5") ; a little variation
 ;; (set-frame-font "Ubuntu Mono-10.5")
 (setq ns-alternate-modifier 'none)
 (setq ns-command-modifier   'meta)
@@ -831,3 +831,13 @@ See `sort-words'."
   (let ((str (url-unhex-string (buffer-substring beg end))))
     (delete-region beg end)
     (insert str)))
+
+(defun insert-link ()
+  (interactive)
+  (evil-execute-macro
+   1
+   [73 33 91 93 40 escape 65 41 escape 73 91 escape 65 93 40 escape 74 65 41 escape 106 106]))
+
+(global-set-key "\C-ci" 'insert-link)
+
+(load "lilypond-init")

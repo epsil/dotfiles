@@ -1,5 +1,6 @@
 export PATH=/usr/local/bin:$HOME/.cabal/bin:$PATH
 export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:/snap/bin
 export PATH=$PATH:/usr/local/opt/ruby/bin
 export PATH=$PATH:~/Library/Android/sdk/platform-tools
 export PATH=$PATH:~/Qt/5.4/clang_64/bin
