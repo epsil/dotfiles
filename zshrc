@@ -18,6 +18,9 @@ unsetopt PROMPT_SP
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
+# Use vi keybindings
+# bindkey -v
+
 # Disable XON/XOFF flow control
 stty -ixon
 
@@ -65,3 +68,21 @@ PS1=$'%{\e[01;32m%}%n@%m%{\e[0m%}:%{\e[01;34m%}%~%{\e[0m%}$ '
 autoload edit-command-line
 zle -N edit-command-line
 bindkey '^X^E' edit-command-line
+
+# Load antigen file
+source /usr/share/zsh-antigen/antigen.zsh
+
+# Bundles
+antigen bundle zsh-users/zsh-autosuggestions
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle git
+
+# Tell Antigen that you're done
+antigen apply
+
+# Syntax highlighting
+source ~/.antigen/bundles/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Autocompletion
+source ~/.antigen/bundles/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
