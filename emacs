@@ -1,7 +1,7 @@
 ;; ~/.Xresources: Emacs.font: DejaVu Sans Mono-9
 ;; !!! Remember to xrdb -merge ~/.Xresources !!!
 ;; (set-frame-font "DejaVu Sans Mono-9")
-(set-frame-font "Consolas-10.5") ; a little variation
+;; (set-frame-font "Consolas-10.5") ; a little variation
 ;; (set-frame-font "Ubuntu Mono-10.5")
 (setq ns-alternate-modifier 'none)
 (setq ns-command-modifier   'meta)
