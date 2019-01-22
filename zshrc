@@ -74,6 +74,7 @@ source /usr/share/zsh-antigen/antigen.zsh
 
 # Bundles
 antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
