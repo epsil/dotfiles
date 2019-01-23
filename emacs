@@ -276,6 +276,10 @@ See `sort-words'."
 	   `((,js--regexp-literal-fix (1 "|") (2 "|"))))
      (setq js-font-lock-syntactic-keywords js-font-lock-syntactic-keywords-fix)))
 
+;; JavaScript
+(add-to-list 'auto-mode-alist '("\\.mjs" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.ts" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx" . js-mode))
 (setq js-indent-level 2) ; 4
 
 ;; Scala
