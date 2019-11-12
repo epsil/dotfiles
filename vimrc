@@ -14,7 +14,7 @@ set mouse=a
 syntax on
 
 set encoding=utf-8
-set guifont=Consolas:h10
+"set guifont=Consolas:h10
 
 set autoindent
 set smartindent

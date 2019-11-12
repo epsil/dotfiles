@@ -70,7 +70,7 @@ zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
 # Load antigen file
-source /usr/share/zsh-antigen/antigen.zsh
+source ~/antigen/antigen.zsh
 
 # Bundles
 antigen bundle zsh-users/zsh-autosuggestions
