@@ -1,3 +1,4 @@
+set noswapfile
 set number
 set ruler
 set laststatus=2
@@ -11,10 +12,13 @@ set nojoinspaces
 set expandtab
 set cursorline
 set mouse=a
+set wrap
+set linebreak
 syntax on
 
 set encoding=utf-8
 "set guifont=Consolas:h10
+set guifont="Ubuntu Mono":h10
 
 set autoindent
 set smartindent
@@ -32,6 +36,9 @@ map å [[
 map æ []
 map Å {
 
+map <F1> <nop>
+nmap <F1> <nop>
+imap <F1> <nop>
 map <F5> :e!<CR>
 imap <F5> :e!<CR>
 vmap <F5> :e!<CR>
