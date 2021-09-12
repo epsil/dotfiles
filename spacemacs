@@ -2,6 +2,12 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
+;; Markdown
+(with-eval-after-load 'markdown-mode
+  (add-hook 'markdown-mode-hook #'turn-on-visual-line-mode))
+
 (defun dotspacemacs/layers ()
   "Layer configuration:
 This function should only modify configuration layer settings."
@@ -547,9 +553,6 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded.")
 
 
-;; Markdown
-(eval-after-load 'markdown-mode
-  '(add-hook 'markdown-mode-hook #'turn-on-visual-line-mode))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
