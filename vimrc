@@ -17,8 +17,12 @@ set linebreak
 syntax on
 
 set encoding=utf-8
-"set guifont=Consolas:h10
-set guifont="Ubuntu Mono":h10
+"set guifont=Fixedsys\ Excelsior\ 14
+"set guifont=Consolas\ 12
+"set guifont=Ubuntu\ Mono\ 14
+"set guifont=Hack\ 12
+"set guifont=DejaVu\ Sans\ Mono\ 11
+set guifont=Ubuntu\ Mono\ 14
 
 set autoindent
 set smartindent
@@ -51,7 +55,7 @@ vmap <F12> <ESC>:nohlsearch<CR>gv
 map <M-q> !}fmt<CR>
 imap <M-q> <Esc>!}fmt<CR>i
 
-autocmd BufAdd,BufNewFile,BufRead * nested tab sball
+" autocmd BufAdd,BufNewFile,BufRead * nested tab sball
 " autocmd BufWritePre * :%s/\s\+$//e
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
