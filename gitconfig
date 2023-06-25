@@ -18,3 +18,5 @@
 	keepBackup = false
 	path = "C:/Program Files/Unity HoloLens 5.4.0f3-HTP/Editor/Data/Tools/UnityYAMLMerge.exe"
 	cmd = \"C:/Program Files/Unity HoloLens 5.4.0f3-HTP/Editor/Data/Tools/UnityYAMLMerge.exe\" merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
+[init]
+	defaultBranch = main
